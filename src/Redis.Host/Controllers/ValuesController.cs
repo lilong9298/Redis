@@ -4,11 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Redis.Host.Controllers
-{
+namespace Redis.Host.Controllers {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
-    {
+    public class ValuesController : Controller {
         protected readonly IRedis _redis;
 
         public ValuesController(IRedis redis) {
@@ -16,35 +14,33 @@ namespace Redis.Host.Controllers
         }
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            
-            return new string[] { "value1", "value2" };
+        public async Task<bool> Get() {
+            await _redis.StoreAsync<string>("123", DateTime.Now.Date.ToString(), "123121");
+            return true;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+        public async Task<string> Get(int id) {
+
+            var val = await _redis.GetAsync<string>("123",DateTime.Now.Date.ToString());
+
+            return val;
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
-        {
+        public void Post([FromBody]string value) {
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
+        public void Put(int id, [FromBody]string value) {
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+        public void Delete(int id) {
         }
     }
 }

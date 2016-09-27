@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Redis.Extensions;
 using StackExchange.Redis;
@@ -13,8 +14,8 @@ namespace Redis.Internal
 
         protected readonly IDatabase _db;
 
-        public RedisServer(RedisOptions redisOptions) {
-            _redisOptions = redisOptions;
+        public RedisServer(IOptions<RedisOptions> redisOptions) {
+            _redisOptions = redisOptions.Value;
             var connection = RedisConnectionMultiplexerStore.GetConnectionMultiplexer(_redisOptions.DataSoure);
             _db = connection.GetDatabase(_redisOptions.DBID);
         }
